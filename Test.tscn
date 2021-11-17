@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://0sukyc8qg2kj"]
+
+[ext_resource type="Shader" path="res://Halftone.gdshader" id="1_f5agh"]
+[ext_resource type="Texture2D" uid="uid://fyn2i085rtud" path="res://images/esther.jpg" id="2_skier"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q03qv"]
+shader = ExtResource( "1_f5agh" )
+shader_param/frequency = 120.0
+shader_param/angle_y = 1.5708
+shader_param/angle_k = 0.261799
+shader_param/aa_scale = 0.7
+shader_param/angle_m = 1.309
+shader_param/angle_c = 1.8326
+
+[node name="Test" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource( "ShaderMaterial_q03qv" )
+position = Vector2(967, 742)
+scale = Vector2(4.56934, 4.56934)
+texture = ExtResource( "2_skier" )
