@@ -11,8 +11,12 @@ config_version=4
 [application]
 
 config/name="halftone"
-run/main_scene="res://Test.tscn"
+run/main_scene="res://TestViewport.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/stretch/mode="canvas_items"
 
 [rendering]
 

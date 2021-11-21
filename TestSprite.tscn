@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4bql576mg40j"]
+
+[ext_resource type="Shader" path="res://halftone_sprite.gdshader" id="1_46a3h"]
+[ext_resource type="Texture2D" uid="uid://cui76q4nayx5k" path="res://images/mikkel2.jpg" id="1_88ajf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d4toj"]
+shader = ExtResource( "1_46a3h" )
+shader_param/frequency = 80.0
+shader_param/aa_scale = 0.7
+shader_param/angle_y = 1.5708
+shader_param/angle_c = 1.8326
+shader_param/angle_k = 0.261799
+shader_param/angle_m = 1.309
+
+[node name="TestSprite" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource( "ShaderMaterial_d4toj" )
+position = Vector2(492, 295)
+scale = Vector2(1.51104, 1.51104)
+texture = ExtResource( "1_88ajf" )

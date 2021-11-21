@@ -1,0 +1,84 @@
+[gd_scene load_steps=12 format=3 uid="uid://djs0p2p2q2yk1"]
+
+[ext_resource type="Shader" path="res://halftone_viewport.gdshader" id="1_wnosf"]
+[ext_resource type="Script" path="res://CameraFly.gd" id="2_g0o7v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_icxv4"]
+albedo_color = Color(1, 0.941176, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5if0e"]
+material = SubResource( "StandardMaterial3D_icxv4" )
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wxkqy"]
+albedo_color = Color(0, 1, 0.12549, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_c84vq"]
+material = SubResource( "StandardMaterial3D_wxkqy" )
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2h0h3"]
+
+[sub_resource type="Sky" id="Sky_2j1af"]
+sky_material = SubResource( "ProceduralSkyMaterial_2h0h3" )
+
+[sub_resource type="Environment" id="Environment_htocm"]
+background_mode = 2
+sky = SubResource( "Sky_2j1af" )
+ss_reflections_enabled = true
+ssao_enabled = true
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+sdfgi_read_sky_light = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l74jq"]
+shader = ExtResource( "1_wnosf" )
+shader_param/frequency = 200.0
+shader_param/aa_scale = 0.7
+shader_param/angle_y = 1.5708
+shader_param/angle_c = 1.8326
+shader_param/angle_k = 0.261799
+shader_param/angle_m = 1.309
+
+[sub_resource type="BoxMesh" id="BoxMesh_sh1ao"]
+size = Vector3(10, 0.1, 10)
+
+[node name="TestViewport" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.85334, 0, 0)
+mesh = SubResource( "SphereMesh_5if0e" )
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.149419, 2.53628, 0)
+gi_mode = 1
+mesh = SubResource( "SphereMesh_c84vq" )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( "Environment_htocm" )
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+material = SubResource( "ShaderMaterial_l74jq" )
+offset_right = 1024.0
+offset_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1024, 600)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.3737)
+script = ExtResource( "2_g0o7v" )
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.837092, -0.282841, 0.468272, -0.112955, 0.748169, 0.653822, -0.535274, -0.600203, 0.594338, -0.0966265, 0.195312, 6.31708)
+light_bake_mode = 2
+shadow_enabled = true
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.39246, 0)
+mesh = SubResource( "BoxMesh_sh1ao" )

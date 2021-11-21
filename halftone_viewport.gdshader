@@ -99,10 +99,11 @@ void fragment() {
 	// Use a texture to modulate the size of the dots
 	vec3 texcolor = texture2D_bilinear_alt(TEXTURE, UV, TEXTURE_PIXEL_SIZE).rgb;
 	
+	vec2 corrected_uv = UV * vec2(TEXTURE_PIXEL_SIZE.y / TEXTURE_PIXEL_SIZE.x, 1.0);		
 	// Fractal noise
-	float n = 0.1 * snoise(UV * 200.0);
-	n += 0.05 * snoise(UV * 400.0);
-	n += 0.025 * snoise(UV * 800.0);
+	float n = 0.1 * snoise(corrected_uv * 200.0);
+	n += 0.05 * snoise(corrected_uv * 400.0);
+	n += 0.025 * snoise(corrected_uv * 800.0);
 
 	// Perform a rough RGB-to-CMYK conversion
     vec4 cmyk;
@@ -111,16 +112,16 @@ void fragment() {
     cmyk.xyz -= cmyk.w; // Subtract K equivalent from CMY
 	
 	// UVS
-	vec2 uv_k = frequency * uv_rotated(angle_k, UV);
+	vec2 uv_k = frequency * uv_rotated(angle_k, corrected_uv);
 	vec2 nearest_k = 2.0 * fract(uv_k) - 1.0;
 	float k = aastep(0.0, sqrt(cmyk.w)-length(nearest_k) + n);
-	vec2 uv_c = frequency * uv_rotated(angle_c, UV);
+	vec2 uv_c = frequency * uv_rotated(angle_c, corrected_uv);
 	vec2 nearest_c = 2.0 * fract(uv_c) - 1.0;
 	float c = aastep(0.0, sqrt(cmyk.x)-length(nearest_c) + n);
-	vec2 uv_m = frequency * uv_rotated(angle_m, UV);
+	vec2 uv_m = frequency * uv_rotated(angle_m, corrected_uv);
 	vec2 nearest_m = 2.0 * fract(uv_m) - 1.0;
 	float m = aastep(0.0, sqrt(cmyk.y)-length(nearest_m) + n);
-	vec2 uv_y = frequency * uv_rotated(angle_y, UV);
+	vec2 uv_y = frequency * uv_rotated(angle_y, corrected_uv);
 	vec2 nearest_y = 2.0 * fract(uv_y) - 1.0;
 	float y = aastep(0.0, sqrt(cmyk.z)-length(nearest_y) + n);
 
@@ -131,7 +132,5 @@ void fragment() {
 	rgbscreen = mix(rgbscreen, black, 0.85 * k + 0.3 * n);
 	
 	// Blend to regular tex at small sizes
-	float afwidth = 2.0 * frequency * max(length(dFdx(UV)), length(dFdy(UV)));
-	float blend = smoothstep(0.4, 2.2, afwidth);
-	COLOR = vec4(mix(rgbscreen, texcolor, blend), 1.0);
+	COLOR = vec4(rgbscreen, 1.0);
 }
